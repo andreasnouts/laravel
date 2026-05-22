@@ -12,7 +12,8 @@ class AuditLog extends Model
 
     protected $fillable = [
         'event',
-        'auditable',
+        'auditable_type',
+        'auditable_id',
         'user_id',
         'previous_payload',
         'new_payload',
@@ -33,7 +34,7 @@ class AuditLog extends Model
      * Returns the User this AuditLog belongs to or null if it's a System Log
      * @return BelongsTo|null
      */
-    public function User(): BelongsTo|null
+    public function user(): BelongsTo|null
     {
         return $this->belongsTo(User::class);
     }

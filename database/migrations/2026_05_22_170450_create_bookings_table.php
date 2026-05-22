@@ -14,8 +14,6 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
             $table->unsignedBigInteger('guide_id');
             $table->foreign('guide_id')->references('id')->on('guides');//->onDelete('cascade');
             $table->enum('status', array_column(BookingStatus::cases(), 'value'))->default(BookingStatus::DRAFT->value);
