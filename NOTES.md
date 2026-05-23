@@ -13,21 +13,23 @@ This means the persistence layer can be swapped (e.g. from MySQL to an external 
 The `BookingService` is the only place where business rules live:
 
 - Computing the booking total from line items
-- Deciding whether the status should be `draft` or `pending_approval` based on the €5,000 threshold
+- Deciding what the booking status should be based on the €5,000 threshold
 - Dispatching the `ProcessBookingApproval` job
 - Enforcing that notes can only be updated on `draft` bookings
 
-Controllers are intentionally thin — they validate input, call the service, and return a response. Repositories are intentionally dumb — they persist and retrieve, nothing more.
+Controllers are intentionally "thin". 
+They validate input, call the service, and return a response. 
+Repositories are intentionally "dumb" — they persist and retrieve, nothing more.
 
 ---
 
 ## 3. Decorator Pattern for Audit Logging
 
-The audit logging system is built as a decorator chain around `IAuditLogger`:
+The audit logging system is built as a decorator around `IAuditLogger`:
 
 ```
 DatabaseAuditLogger        (decorator — writes to audit_logs table + delegates)
-    └── LaravelLogger      (inner — writes to Laravel's log file)
+    |---LaravelLogger      (inner — writes to Laravel's log file)
 ```
 
 `DatabaseAuditLogger` implements `IAuditLogger` and wraps any other `IAuditLogger` implementation. This means the logging chain is composable — a third logger (e.g. a queue-based logger) can be added by wrapping again without modifying any existing class.
@@ -36,31 +38,28 @@ DatabaseAuditLogger        (decorator — writes to audit_logs table + delegates
 
 ## 4. Null Object Pattern via NullAuditLogger
 
-`NullAuditLogger` implements `IAuditLogger` but does nothing. It exists so that in test environments, audit logging can be silenced without conditionals or mocking throughout the codebase. The consumer of `IAuditLogger` never needs to check whether logging is enabled — it just calls `log()` and the null implementation handles the rest silently.
-
-Typical test usage:
-
-```php
-// Silence logging entirely
-new NullAuditLogger()
-
-// DB audit logs without log file noise
-new DatabaseAuditLogger(new NullAuditLogger())
-```
+`NullAuditLogger` implements `IAuditLogger` but does nothing. 
+It exists so that in test environments audit logging can be silenced.
 
 ---
 
 ## 5. Enums over Database Lookup Tables
 
-An early decision was made to use lookup tables (`guide_statuses`, `booking_statuses`) with foreign keys. These were replaced with PHP 8.1 backed enums (`GuideStatus`, `BookingStatus`).
+An early decision was made to use lookup tables (`guide_statuses`, `booking_statuses`) 
+with foreign keys. 
+However, I decided to replace them with DB enums backed with PHP 8.1 enums (`GuideStatus`, `BookingStatus`).
 
-**Reasoning:** status values for guides (`active`, `suspended`) and bookings (`draft`, `pending_approval`, `approved`, `rejected`) are fixed by business logic. Adding or changing a status requires a code change regardless — a DB row edit alone would not be sufficient. Enums make the allowed values explicit, self-documenting, and statically analysable, and eliminate unnecessary joins.
+**Reasoning:** status values for guides (`active`, `suspended`) 
+and bookings (`draft`, `pending_approval`, `approved`, `rejected`) are fixed by business logic. 
+Adding or changing a status requires a code change regardless. 
+DB Enums make the allowed values explicit, self-documenting and eliminate unnecessary joins.
 
 ---
 
 ## 6. `hash_id` as the Public-Facing Identifier
 
-Auto-increment integer IDs are never exposed in API URIs. Instead, each `Guide` and `Booking` has a `hash_id` (9-character slug generated via the `HasHashID` trait) used in all routes.
+Auto-increment integer IDs are never exposed in API URIs. 
+Instead, each `Guide` and `Booking` has a `hash_id` (9-character slug generated via the `HasHashID` trait) used in all routes.
 
 **Reasoning:** exposing sequential integer IDs leaks information about record counts and makes enumeration attacks trivial. `hash_id` values are opaque to the consumer while remaining stable and URL-safe.
 
@@ -70,23 +69,30 @@ Auto-increment integer IDs are never exposed in API URIs. Instead, each `Guide` 
 
 ## 7. Domain Exceptions Mapped to HTTP Responses in the Handler
 
-Business rule violations throw domain exceptions (`GuideNotFoundException`, `BookingNotEditableException`) that extend `RuntimeException`. These are not HTTP-aware — they carry no status codes.
+Initially generic `\Exceptions` were thrown. Although I know the best approach is to have your custom
+Domain based exception.
 
-The HTTP meaning is assigned once, in `App\Exceptions\Handler.php`, via `$this->renderable()`. This keeps controllers free of try/catch blocks and ensures consistent error responses across the entire application regardless of where the exception originates.
+Business rule violations now throw domain exceptions (`GuideNotFoundException`, `BookingNotEditableException`) that extend `RuntimeException`. 
+These are not HTTP-aware — they carry no status codes.
+
+
+The HTTP meaning is assigned once, in `App\Exceptions\Handler.php`, via `$this->renderable()`. 
+
+This keeps controllers free of try/catch blocks (well, almost...), but it surely 
+ensures consistent error responses across the entire application regardless of where the exception originates.
 
 ---
 
 ## 8. Validation Rule `exists:` Removed from Form Requests
 
-Laravel's `exists:table,column` validation rule hits the database directly, bypassing the repository entirely. To preserve the repository pattern boundary, guide existence is validated manually in `BookingService` via `IGuideRepository::findByHashId()`. A `GuideNotFoundException` is thrown if the guide does not exist, which the handler maps to a 404 response.
+Laravel's `exists:table,column` validation rule hits the database directly, bypassing the repository entirely. 
+To preserve the repository pattern boundary, guide existence is validated manually in `BookingService` via `IGuideRepository::findByHashId()`. A `GuideNotFoundException` is thrown if the guide does not exist, which the handler maps to a 404 response.
 
 ---
 
 ## 9. Job Uniqueness via `ShouldBeUnique`
 
-`ProcessBookingApproval` implements `ShouldBeUnique` with `uniqueId()` keyed on `booking->id`. Dispatching the same job twice for the same booking results in only one execution — the second dispatch is silently dropped by the queue system using a cache lock.
-
-This prevents race conditions if the job is dispatched multiple times due to retries or duplicate requests.
+`ProcessBookingApproval` implements `ShouldBeUnique` with `uniqueId()` keyed on `booking->id`. Dispatching the same job twice for the same booking results in only one execution — the second dispatch is silently dropped by the queue system.
 
 ---
 
