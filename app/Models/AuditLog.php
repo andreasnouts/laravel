@@ -27,6 +27,7 @@ class AuditLog extends Model
     ];
 
 
+    public $timestamps = false;
 
     /*******      R E L A T I O N S      ******/
 

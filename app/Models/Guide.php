@@ -12,6 +12,7 @@ class Guide extends Model
     use HasFactory;
 
     protected $fillable = [
+        'hash_id',
         'name',
         'email',
         'status'
@@ -23,7 +24,18 @@ class Guide extends Model
 
 
 
-    /*******      C A L C U  L A T E D    A T T R I B U T E S      ******/
+    /**
+     * Work with hash_id as model key...
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'hash_id';
+    }
+
+
+
+    /*******      C A L C U L A T E D    A T T R I B U T E S      ******/
 
 
     /**
@@ -54,7 +66,7 @@ class Guide extends Model
      * Returns a collection of Bookings made for this Guide
      * @return HasMany
      */
-    protected function bookings(): HasMany
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }

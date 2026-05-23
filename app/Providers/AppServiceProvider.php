@@ -3,8 +3,14 @@
 namespace App\Providers;
 
 use App\Contracts\IAuditLogger;
+use App\Contracts\IBookingRepository;
+use App\Contracts\IGuideRepository;
 use App\Logging\LaravelLogger;
+use App\Models\Guide;
+use App\Repositories\EloquentBookingRepository;
+use App\Repositories\EloquentGuideRepository;
 use App\Services\DatabaseAuditLogger;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -15,16 +21,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            \App\Contracts\IBookingRepository::class,
-            \App\Repositories\EloquentBookingRepository::class
-        );
+        $this->app->bind(IBookingRepository::class, EloquentBookingRepository::class);
+        $this->app->bind(IGuideRepository::class, EloquentGuideRepository::class);
 
         // bind DatabaseLogger implementation to the IAuditLogger Interface,
         // use function() to return new DatabaseAuditLogger since we also need to pass the inner logger instance to
         // its constructor...
         $this->app->bind(IAuditLogger::class, function () {
             return new DatabaseAuditLogger(new LaravelLogger());
+        });
+
+
+        Route::bind('guide', function ($value, $route) {
+            // Check if this is the admin route — bypass active-only scope
+            if ($route->getName() === 'admin.guides.bookings.destroy') {
+                return Guide::withoutGlobalScopes()->findOrFail($value);
+            }
+
+            return Guide::findOrFail($value); // normal scope applies
         });
     }
 

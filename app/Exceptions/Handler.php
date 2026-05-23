@@ -26,5 +26,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (GuideNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        });
+
+        $this->renderable(function (BookingNotEditableException $e) {
+            return response()->json(['message' => $e->getMessage()], 409);
+        });
     }
 }

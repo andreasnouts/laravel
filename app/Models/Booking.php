@@ -6,12 +6,14 @@ use App\Enumerations\BookingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'hash_id',
         'guide_id',
         'status',
         'total',
@@ -29,6 +31,15 @@ class Booking extends Model
         'is_rejected',
     ];
 
+
+    /**
+     * Work with hash_id as model key...
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'hash_id';
+    }
 
 
     /*******      C A L C U L A T E D    A T T R I B U T E S      ******/
@@ -82,5 +93,14 @@ class Booking extends Model
     public function guide(): BelongsTo
     {
         return $this->belongsTo(Guide::class);
+    }
+
+    /**
+     * Returns a Collection of Booking Items associated with the Current Booking...
+     * @return HasMany
+     */
+    public function bookingItems(): HasMany
+    {
+        return $this->hasMany(BookingItem::class);
     }
 }

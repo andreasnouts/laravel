@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
+            $table->string('hash_id', '9')->unique(); //
             $table->string('name');
             $table->string('email');
             $table->enum('status', array_column(GuideStatus::cases(), 'value'))

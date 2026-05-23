@@ -168,6 +168,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        // added passport Service Provider
+        Laravel\Passport\PassportServiceProvider::class,
     ])->toArray(),
 
     /*
