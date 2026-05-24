@@ -153,3 +153,24 @@ There is a listener for handling the `BookingRequiresManualApproval` event. For 
 only Audits the fact the there is a Booking that requires manual Approval, however I did it to show
 that the listener could possibly insert the event (eg. through an API call) to an Administrator
 system that deals with manual Booking Approvals, or it could even add a message to Slack, etc...
+
+---
+
+## Notes on the Optional Tests
+As I've told you in the interview we currently neither do TDD, nor write any random Test whatsoever! 
+I have had a brief attempt to see how you set it up at some point with a colleague, 
+but it was only brief :(
+So I intentionally decided not complete the Optional "Tests" section as it would be a total cheat 
+since in order to complete it I would have to use "some" AI help. This will give you a false idea
+for myself! I'd rather be honest so a) you know what to expect and b) I don't trick myself if 
+we both decide we want to work together!
+However, having done TDD development a few years back working with the .net Framework, 
+plus my current experience and understanding I do not think that it ll take me more than a few hours 
+to understand how to set up the Test Environment in a Laravel/PHP world.
+
+To compensate (just a bit) I've included a postman collection offering some testing to 
+confirm the endpoints do what they are supposed to do, plus checking that business rules 
+are applied eg. the total amount threshold causing Booking to be queued for approval and then 
+the 10.000 threshold causing status to be set to "pending_approval". This is also why I decided 
+to write the Listener mentioned above to handle the `BookingRequiresManualApproval` event, so that 
+I can at least AuditLog and ensure event was raised and listener "recorded" it...
