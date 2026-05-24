@@ -1,0 +1,186 @@
+{
+  "info": {
+    "_postman_id": "cf4e6198-3e61-4a11-bd4f-f5dac0eb9538",
+    "name": "ClioMuseTours",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21292375",
+    "_collection_link": "https://go.postman.co/collection/21292375-cf4e6198-3e61-4a11-bd4f-f5dac0eb9538?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "vhost-check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://cliomusetours.io/vhost",
+          "protocol": "http",
+          "host": [
+            "cliomusetours",
+            "io"
+          ],
+          "path": [
+            "vhost"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get oAuth Token",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"grant_type\": \"client_credentials\",\r\n    \"client_id\": \"1\",\r\n    \"client_secret\": \"jA9n9d27heRT6SFb68ukVFQ0v0aHp8KCNpghzgrg\",\r\n    \"scope\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://cliomusetours.io/oauth/token",
+          "protocol": "http",
+          "host": [
+            "cliomusetours",
+            "io"
+          ],
+          "path": [
+            "oauth",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Guide Bookings",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYThkMzZkMDUxN2IyYWNjM2VlYWVlYjlkZWQxNzBiZTMwNWJmZWFjOThjODJkMmRhYjliNDliNTJhYzYwYWVhY2NlYTVjOWNhZWJmZDgzYTMiLCJpYXQiOjE3Nzk1NTY2MDAuNzc2NDk1LCJuYmYiOjE3Nzk1NTY2MDAuNzc2NDk4LCJleHAiOjE4MTEwOTI2MDAuNzY3OTAyLCJzdWIiOiIiLCJzY29wZXMiOltdfQ.KpH26ByXSxTzZLI1buryjI7QxNS6EQdvv7PolZKsrLOFz9AK-EQ8kdYQVxV57ztclpFpB5LnDu4YhIJv5kEcjYoqepAZnOKvOHa5dPUW8MUSNrC6WrRnfOXk1VrJVsF8xO5Ja81P8Y8XWuB2vBV8CvDuya9d-1Q_M5y3iNsChbGDPKh5XqmhiW95z2-ryJs3CcModxhO_jBrZUduusoTNe4GOA69LqhoDlGZs1HSY6JjBk20LmtRCiFquyp2EgH6CG7XtU4lOaNv59DPuakzx6bvoZ9XxlkvFmYVTQRssBoNhr5ad7njhe6sA06l1mL1W0OerZIW70TW4HtTO3iKj2ze1a9s50ccj25-pnLwf7akvU1ICvfJTZ7R5SMkuRjULtpuv7sxcfm--Y4HtSQLN4XzSNGFBstUoe7-x9yqHSxDv_BTiAUH5ubnyknora4ZUraRsmmicrtxqLsfzq0U_J4bpF-skdS6vPcbKH54D-c9UAeteAkb4bPbz4c356fcbeBLWtwMn7MSgtLPrtvsdc-Gu9InW4wRfEFsgJK74k7fuCrqsiQJ5u1hDT-Vbm5FhNDC-cKPcD0WJDkqS2hO3FNsFIE-boGbY8Cq7XfzhRsB2f7UQddKvExzR61w6PI-8ZpX_-3Q2-pgJCO2p3LiVe1Kmi_ef9hZYNDYMMKKZp8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://cliomusetours.io/api/v1/guides/2y12lvrhm/bookings",
+          "protocol": "http",
+          "host": [
+            "cliomusetours",
+            "io"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "guides",
+            "2y12lvrhm",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Booking Notes",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYThkMzZkMDUxN2IyYWNjM2VlYWVlYjlkZWQxNzBiZTMwNWJmZWFjOThjODJkMmRhYjliNDliNTJhYzYwYWVhY2NlYTVjOWNhZWJmZDgzYTMiLCJpYXQiOjE3Nzk1NTY2MDAuNzc2NDk1LCJuYmYiOjE3Nzk1NTY2MDAuNzc2NDk4LCJleHAiOjE4MTEwOTI2MDAuNzY3OTAyLCJzdWIiOiIiLCJzY29wZXMiOltdfQ.KpH26ByXSxTzZLI1buryjI7QxNS6EQdvv7PolZKsrLOFz9AK-EQ8kdYQVxV57ztclpFpB5LnDu4YhIJv5kEcjYoqepAZnOKvOHa5dPUW8MUSNrC6WrRnfOXk1VrJVsF8xO5Ja81P8Y8XWuB2vBV8CvDuya9d-1Q_M5y3iNsChbGDPKh5XqmhiW95z2-ryJs3CcModxhO_jBrZUduusoTNe4GOA69LqhoDlGZs1HSY6JjBk20LmtRCiFquyp2EgH6CG7XtU4lOaNv59DPuakzx6bvoZ9XxlkvFmYVTQRssBoNhr5ad7njhe6sA06l1mL1W0OerZIW70TW4HtTO3iKj2ze1a9s50ccj25-pnLwf7akvU1ICvfJTZ7R5SMkuRjULtpuv7sxcfm--Y4HtSQLN4XzSNGFBstUoe7-x9yqHSxDv_BTiAUH5ubnyknora4ZUraRsmmicrtxqLsfzq0U_J4bpF-skdS6vPcbKH54D-c9UAeteAkb4bPbz4c356fcbeBLWtwMn7MSgtLPrtvsdc-Gu9InW4wRfEFsgJK74k7fuCrqsiQJ5u1hDT-Vbm5FhNDC-cKPcD0WJDkqS2hO3FNsFIE-boGbY8Cq7XfzhRsB2f7UQddKvExzR61w6PI-8ZpX_-3Q2-pgJCO2p3LiVe1Kmi_ef9hZYNDYMMKKZp8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"notes\": \"Small group, flexible schedule (updated v2).\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://cliomusetours.io/api/v1/bookings/2y12cmaok/notes",
+          "protocol": "http",
+          "host": [
+            "cliomusetours",
+            "io"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "bookings",
+            "2y12cmaok",
+            "notes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create New Booking",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmYwYjkzZDdmMTYyYzg3YWI1NzhiN2NhNzgyNjA5MmMzMTE5NzMzYmRmNDM3N2UwYjkxNDhhMzdlZmQ4NjZhMDhhMzIyY2I2MTQ0ZjE2NDAiLCJpYXQiOjE3Nzk1NjIzMzcuNzEyMzcyLCJuYmYiOjE3Nzk1NjIzMzcuNzEyMzc0LCJleHAiOjE4MTEwOTgzMzcuNTIzOTY4LCJzdWIiOiIiLCJzY29wZXMiOltdfQ.JwcAcgmNd-adp_pmFMQQBqurppLfny06F1RKTIvbBBX58Sb8MJNKQQRC2VKqxAr0-oRtPYjnePtbYvvd_d1m_C_q5-DWeKL99jSujxZA8jZVcIC_LlxUd5bWq9-_QrLKwZ339ovqR_cIlTna7A8sMYCWNjWDo4hWIn-kVViy-14kaua_JXJ6QmMtwFcvEsBxA8Hmsji6fLwGyb5Lc5GFssw_HJ754H6yz9Ffw4PALaDpkifPipLxf7R6hESGpm1BjBlk4Qy6D8BzXUsbJ3IPVAyvUBIZs5W-2hsfkr1XwFBjHHfgA5cxsRhjrz2QpR67jXIMLt2-C3XbEPza9INq0ABBK6cr50Fv6u7y5Q3hdFizMa_-GKqXL1e-hfl0naz8WpMrTz5vOOLDkOs88BJC39jXLUZu5r_HEQb02CivLaqjaKCukuMAKxitkrwfqx2_72GbEzZECS20bKSlhp03ApFOeIMZYX37sKe5CbC7euyT0qRu4sjIQXH7lgG7Gf2t7mORhA5sumvk2AW9CzauhTCcpXYPWTaDl6DSkRuaAdNXHDrvuQXmy54iaU9kCow7KTUarVyrdB3XK0eMLAT3fxTqmHRgFQv5cgjur5rn2TTq3lXRgP-8NgBFmdhtR_9E4NAi1twnTJmAgCQ0xY0_hzBv0MIrCyiJh9zA0Pd-zzE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"guide_hash_id\": \"2y12dusx4\",\r\n    \"notes\": \"Large Morning group 3, meet at main entrance.\",\r\n    \"items\": [\r\n        {\r\n            \"tour_name\": \"Acropolis\",\r\n            \"participants\": 25,\r\n            \"price_per_person\": 200.00\r\n        },\r\n        {\r\n            \"tour_name\": \"Mystra\",\r\n            \"participants\": 35,\r\n            \"price_per_person\": 200.00\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://cliomusetours.io/api/v1/bookings/store",
+          "protocol": "http",
+          "host": [
+            "cliomusetours",
+            "io"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "bookings",
+            "store"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

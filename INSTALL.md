@@ -101,13 +101,7 @@ This will create all tables and populate them with two guides and sample booking
 
 ## 6. Queue Setup
 
-Create the jobs table:
-
-```bash
-php artisan queue:table
-php artisan queue:failed-table
-php artisan migrate
-```
+Jobs related tables are included in the migrations above. 
 
 To process queued jobs locally:
 
@@ -119,12 +113,7 @@ php artisan queue:work
 
 ## 7. Passport Setup
 
-Publish and run Passport migrations:
-
-```bash
-php artisan vendor:publish --tag=passport-migrations
-php artisan migrate
-```
+No need to publish and run Passport migrations, as they are included in the project migrations.
 
 Generate Passport encryption keys:
 
@@ -140,7 +129,9 @@ Create a client credentials client:
 php artisan passport:client --client
 ```
 
-Give it a name when prompted (e.g. `CliomuseTours Client`). **Save the outputted `client_id` and `client_secret`** — the secret is only shown once.
+Give it a name when prompted (e.g. `CliomuseTours Client`). 
+**Save the outputted `client_id` and `client_secret`** — the secret is only shown once and you 
+will need it in step 8 below. If lost you can obtain it from oauth_clients DB table.
 
 ---
 
@@ -202,3 +193,21 @@ All endpoints are prefixed with `/api/v1` and require a valid Bearer token.
 ```
 
 > If the computed total exceeds €5,000 the booking status will be set to `pending_approval` and a background job will be dispatched automatically.
+
+---
+
+### Testing API Endpoints with Postman
+Find a json file in the route directly of the solution named:
+`ClioMuseTours.postman_collection.json` and import it to your Postman instance.
+
+Within that collection you should find 5 useful end point Requests.
+- vhost-check (just checks vhost is set up OK)
+- Get oAuth Token (returns a token to be used in subsequent calls). You should fill client_id and client_secret in the request body.
+- Get guide Bookings (You should obtain a valid Guide hash_id from the Database and replace the one currently found in the request body)
+- Update Booking Notes (same as above, you should obtain a valid Booking hash_id from the Database, or use the next endpoint to create a Booking which will respond with the new Booking Details, you can then use the hash_id of the new Booking)
+- Create New Booking  (Will create a new booking exceeding the €10,000 Threshold so this will cause to it to be sent to the queue for processing 
+but then its status will be set (remain) to `Pending Approval` and the event 
+`BookingRequiresManualApproval` will be raised.  
+
+---
+**An honest confession:** Special thanks to AI tools for helping me **format** this .md file nicely :)

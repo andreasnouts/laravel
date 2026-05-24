@@ -145,3 +145,11 @@ which is consistent with the nullable `user_id` on `audit_logs`.
 
 Routes are protected by Passport's `CheckClientCredentials` middleware, 
 registered as the `client` alias in `Kernel.php`.
+
+---
+
+## * Little Extra Work
+There is a listener for handling the `BookingRequiresManualApproval` event. For the time being it 
+only Audits the fact the there is a Booking that requires manual Approval, however I did it to show
+that the listener could possibly insert the event (eg. through an API call) to an Administrator
+system that deals with manual Booking Approvals, or it could even add a message to Slack, etc...
