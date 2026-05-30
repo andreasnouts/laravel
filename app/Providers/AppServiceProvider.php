@@ -33,12 +33,17 @@ class AppServiceProvider extends ServiceProvider
 
 
         Route::bind('guide', function ($value, $route) {
+            /** @var IGuideRepository $guideRepo */
+            $guideRepo = app(IGuideRepository::class);
             // Check if this is the admin route — bypass active-only scope
-            if ($route->getName() === 'admin.guides.bookings.destroy') {
-                return Guide::withoutGlobalScopes()->findOrFail($value);
+            if ($route->getName() === 'admin.guides.bookings.destroy')
+            {
+                return $guideRepo->getByHashIdWithoutGlobalScopes($value) ?? abort(404);
+//                return Guide::withoutGlobalScopes()->findOrFail($value);
             }
 
-            return Guide::findOrFail($value); // normal scope applies
+//            return Guide::findOrFail($value); // normal scope applies
+            return $guideRepo->getByHashId($value) ?? abort(404); // normal scope applies
         });
     }
 

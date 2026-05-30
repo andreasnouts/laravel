@@ -34,6 +34,16 @@ class Guide extends Model
     }
 
 
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('active', function($query) {
+            $query->where('status', GuideStatus::ACTIVE);
+        });
+    }
+
 
     /*******      C A L C U L A T E D    A T T R I B U T E S      ******/
 

@@ -16,4 +16,12 @@ class EloquentGuideRepository implements \App\Contracts\IGuideRepository
     {
         return Guide::query()->where('hash_id', '=', $hashId)->first();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getByHashIdWithoutGlobalScopes(string $hashId): ?Guide
+    {
+        return Guide::withoutGlobalScopes()->where('hash_id', '=', $hashId)->first();
+    }
 }

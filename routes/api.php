@@ -31,7 +31,7 @@ Route::prefix('v1')->middleware('client')->group(function() {
         Route::delete(
             '/admin/guides/{guide}/bookings/{booking}',
             [BookingController::class, 'destroy']
-        )->withoutScopedBindings();
+        )->withoutScopedBindings()->name('admin.guides.bookings.destroy');;
     });
 
 });

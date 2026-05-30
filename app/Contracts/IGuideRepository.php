@@ -13,4 +13,12 @@ interface IGuideRepository
      * @return Model|Guide|null A Guide model instance or null
      */
     public function getByHashId(string $hashId): Model|Guide|null;
+
+    /**
+     * Returns the Guide Model instance matching the given $hashId, or null if none is found
+     * bypassing any Global scopes defined in the Guide model!
+     * @param string $hashId
+     * @return ?Guide A Guide model instance or null
+     */
+    public function getByHashIdWithoutGlobalScopes(string $hashId): ?Guide;
 }
